@@ -1,10 +1,10 @@
 enum Motors {
-	MOTOR_1_L,
-	MOTOR_1_R,
-	MOTOR_2_L,
-	MOTOR_2_R,
-	MOTOR_3_L,
-	MOTOR_3_R,
-	MOTOR_4_L,
-	MOTOR_4_R
+	MOTOR_1_L = 22,
+	MOTOR_1_R = 23,
+	MOTOR_2_L = 24,
+	MOTOR_2_R = 25,
+	MOTOR_3_L = 26,
+	MOTOR_3_R = 27,
+	MOTOR_4_L = 28,
+	MOTOR_4_R = 29
 };
