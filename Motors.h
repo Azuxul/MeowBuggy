@@ -1,0 +1,10 @@
+enum Motors {
+	MOTOR_1_L,
+	MOTOR_1_R,
+	MOTOR_2_L,
+	MOTOR_2_R,
+	MOTOR_3_L,
+	MOTOR_3_R,
+	MOTOR_4_L,
+	MOTOR_4_R
+};
