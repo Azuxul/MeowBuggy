@@ -1,10 +1,15 @@
+#ifndef Morse_h
+#define Morse_h
+
 enum Motors {
-	MOTOR_1_L = 22,
-	MOTOR_1_R = 23,
-	MOTOR_2_L = 24,
-	MOTOR_2_R = 25,
-	MOTOR_3_L = 26,
-	MOTOR_3_R = 27,
-	MOTOR_4_L = 28,
-	MOTOR_4_R = 29
+	MOTOR_1_B = 22,
+	MOTOR_1_F = 23,
+	MOTOR_2_B = 24,
+	MOTOR_2_F = 25,
+	MOTOR_3_B = 26,
+	MOTOR_3_F = 27,
+	MOTOR_4_B = 28,
+	MOTOR_4_F = 29
 };
+
+#endif
