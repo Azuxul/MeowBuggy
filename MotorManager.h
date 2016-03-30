@@ -15,12 +15,12 @@ public:
 
   // Methods
   void stop();
-  void setMotorStatus(Motors motor);
-    void initMotor(Motors motor, unsigned int id);
+  void setMotorStatus(Motors motor, unsigned int status);
 private:
   // Methods
   void update();
-
+  void initMotor(Motors motor, unsigned int id);
+  unsigned int getMotorId(Motors motor);
 
   // Variables
   int motorState[8][2];

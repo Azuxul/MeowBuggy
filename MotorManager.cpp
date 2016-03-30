@@ -14,6 +14,7 @@ MotorManager::MotorManager() {
   initMotor(MOTOR_4_F, 6);
   initMotor(MOTOR_4_B, 7);
 
+  update();
 }
 
 void MotorManager::initMotor(Motors motor, unsigned int id) {
@@ -29,6 +30,40 @@ void MotorManager::update() {
   
   for(unsigned int i = motorArraySize; i >= 0; i--) {
     digitalWrite(motorState[i][MOTOR_PIN], motorState[i][MOTOR_STATE]);
+  }
+}
+
+unsigned int MotorManager::getMotorId(Motors motor) {
+
+  unsigned int resultMotorId = -1;
+  unsigned int motorArraySize = sizeof(motorState);
+  
+  for(unsigned int i = motorArraySize; i >= 0; i--) {
+    if(motorState[i][MOTOR_PIN] == motor) {
+      resultMotorId = i;
+      break;
+    }
+  }
+
+  return resultMotorId;
+}
+
+void MotorManager::stop() {
+  
+  unsigned int motorArraySize = sizeof(motorState);
+  
+  for(unsigned int i = motorArraySize; i >= 0; i--) {
+    motorState[i][MOTOR_STATE] = LOW;
+    digitalWrite(motorState[i][MOTOR_PIN], LOW);
+  }
+}
+
+void MotorManager::setMotorStatus(Motors motor, unsigned int status) {
+
+  unsigned int motorId = getMotorId(motor);
+
+  if(motorId >= 0) {
+    motorState[motorId][MOTOR_STATE] = status;
   }
 }
 
