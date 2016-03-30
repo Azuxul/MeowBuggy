@@ -16,6 +16,8 @@ public:
   // Methods
   void stop();
   void setMotorStatus(Motors motor, unsigned int status);
+  void changeDirectionFromDisatenceArray(int (&distances)[90]);
+  void defualtDirection();
 private:
   // Methods
   void update();
@@ -24,6 +26,7 @@ private:
 
   // Variables
   int motorState[8][2];
+  bool lastIsDefaultDirection;
 };
 
 #endif

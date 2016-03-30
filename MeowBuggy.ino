@@ -9,6 +9,7 @@
 Servo servo;
 int motorLoc;
 bool motorNeg;
+bool needToChangeDirection;
 UltrasonicSensor utlrasonicSensor(ULTRASONIC_ECHO, ULTRASONIC_TRIG);
 MotorManager motorManager;
 int distances[90];
@@ -21,14 +22,18 @@ void setup() {
   servo.write(0);
 
   motorLoc = 180;
-  motorManager.setMotorStatus(MOTOR_1_F, HIGH);
-  motorManager.setMotorStatus(MOTOR_2_F, HIGH);
+
+  motorManager.defualtDirection();
 }
 
 void loop() {
 
   double distance = utlrasonicSensor.getDistance();
   distances[motorLoc/2] = distance;
+
+  if(distance <= 10) {
+    needToChangeDirection = true;
+  }
 
   delay(1);
 
@@ -45,6 +50,13 @@ void updateServoMotor() {
 
   if(motorLoc <= 0 || motorLoc > 180) {
     motorNeg = !motorNeg;
+
+    if(needToChangeDirection) {
+      needToChangeDirection = false;
+      motorManager.changeDirectionFromDisatenceArray(distances);
+    } else {
+      motorManager.defualtDirection();
+    }
   }
 
   servo.write(motorLoc);
