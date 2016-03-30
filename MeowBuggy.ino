@@ -1,5 +1,6 @@
 #include "Motors.h"
 #include "UltrasonicSensor.h"
+#include "MotorManager.h"
 #include <Servo.h>
 
 #define ULTRASONIC_ECHO 30
@@ -9,18 +10,10 @@ Servo servo;
 int motorLoc;
 bool motorNeg;
 UltrasonicSensor utlrasonicSensor(ULTRASONIC_ECHO, ULTRASONIC_TRIG);
+MotorManager motorManager();
+int distances[180];
 
 void setup() {
-
-  // Init motors
-  pinMode(MOTOR_1_F,OUTPUT);
-  pinMode(MOTOR_1_B,OUTPUT);
-  pinMode(MOTOR_2_F,OUTPUT);
-  pinMode(MOTOR_2_B,OUTPUT);
-  pinMode(MOTOR_3_F,OUTPUT);
-  pinMode(MOTOR_3_B,OUTPUT);
-  pinMode(MOTOR_4_F,OUTPUT);
-  pinMode(MOTOR_4_B,OUTPUT);
 
   Serial.begin(9600);
 
@@ -35,14 +28,14 @@ void setup() {
 void loop() {
 
   double distance = utlrasonicSensor.getDistance();
-  Serial.println(distance);
+  distances[motorLoc] = distance;
 
   delay(1);
 
-  updateMotor();
+  updateServoMotor();
 }
 
-void updateMotor() {
+void updateServoMotor() {
   
   if(motorNeg) {
     motorLoc-=2;
