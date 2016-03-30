@@ -10,8 +10,8 @@ Servo servo;
 int motorLoc;
 bool motorNeg;
 UltrasonicSensor utlrasonicSensor(ULTRASONIC_ECHO, ULTRASONIC_TRIG);
-MotorManager motorManager();
-int distances[180];
+MotorManager motorManager;
+int distances[90];
 
 void setup() {
 
@@ -21,14 +21,14 @@ void setup() {
   servo.write(0);
 
   motorLoc = 180;
-
-  utlrasonicSensor.sendTriger();
+  motorManager.setMotorStatus(MOTOR_1_F, HIGH);
+  motorManager.setMotorStatus(MOTOR_2_F, HIGH);
 }
 
 void loop() {
 
   double distance = utlrasonicSensor.getDistance();
-  distances[motorLoc] = distance;
+  distances[motorLoc/2] = distance;
 
   delay(1);
 

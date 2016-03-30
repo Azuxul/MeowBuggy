@@ -2,14 +2,14 @@
 #define Motors_h
 
 enum Motors {
-	MOTOR_1_B = 22,
-	MOTOR_1_F = 23,
-	MOTOR_2_B = 24,
-	MOTOR_2_F = 25,
-	MOTOR_3_B = 26,
-	MOTOR_3_F = 27,
-	MOTOR_4_B = 28,
-	MOTOR_4_F = 29
+	MOTOR_1_B,
+	MOTOR_1_F,
+	MOTOR_2_B,
+	MOTOR_2_F,
+	MOTOR_3_B,
+	MOTOR_3_F,
+	MOTOR_4_B,
+	MOTOR_4_F
 };
 
 #endif

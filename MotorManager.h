@@ -20,7 +20,7 @@ private:
   // Methods
   void update();
   void initMotor(Motors motor, unsigned int id);
-  unsigned int getMotorId(Motors motor);
+  unsigned int getMotorIdFromPin(unsigned int pin);
 
   // Variables
   int motorState[8][2];
