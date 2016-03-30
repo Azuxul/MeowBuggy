@@ -1,5 +1,5 @@
-#ifndef Morse_h
-#define Morse_h
+#ifndef Motors_h
+#define Motors_h
 
 enum Motors {
 	MOTOR_1_B = 22,
