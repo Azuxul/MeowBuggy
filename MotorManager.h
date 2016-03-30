@@ -26,6 +26,7 @@ private:
 
   // Variables
   int motorState[8][2];
+  int buffer;
   bool lastIsDefaultDirection;
 };
 

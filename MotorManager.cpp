@@ -5,7 +5,7 @@
 MotorManager::MotorManager() {
 
   // Init motors
-  initMotor(MOTOR_1_F, 23;
+  initMotor(MOTOR_1_F, 23);
   initMotor(MOTOR_1_B, 22);
   initMotor(MOTOR_2_F, 25);
   initMotor(MOTOR_2_B, 24);
