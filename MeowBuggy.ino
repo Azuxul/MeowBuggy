@@ -1,9 +1,14 @@
 #include "Motors.h"
+#include "UltrasonicSensor.h"
 #include <Servo.h>
+
+#define ULTRASONIC_ECHO 30
+#define ULTRASONIC_TRIG 31
 
 Servo servo;
 int motorLoc;
 bool motorNeg;
+UltrasonicSensor utlrasonicSensor(ULTRASONIC_ECHO, ULTRASONIC_TRIG);
 
 void setup() {
 
@@ -23,11 +28,16 @@ void setup() {
   servo.write(0);
 
   motorLoc = 180;
+
+  utlrasonicSensor.sendTriger();
 }
 
 void loop() {
 
-  delay(10);
+  double distance = utlrasonicSensor.getDistance();
+  Serial.println(distance);
+
+  delay(1);
 
   updateMotor();
 }
