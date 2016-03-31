@@ -1,6 +1,7 @@
 #include "Motors.h"
 #include "UltrasonicSensor.h"
 #include "MotorManager.h"
+#include "Accelerometer.h"
 #include <Servo.h>
 
 #define ULTRASONIC_ECHO 30
@@ -12,7 +13,9 @@ bool motorNeg;
 bool needToChangeDirection;
 UltrasonicSensor utlrasonicSensor(ULTRASONIC_ECHO, ULTRASONIC_TRIG);
 MotorManager motorManager;
+Accelerometer accelerometer;
 int distances[90];
+int delayAccelerometer;
 
 void setup() {
 
@@ -24,6 +27,9 @@ void setup() {
   motorLoc = 180;
 
   motorManager.defualtDirection();
+
+  Wire.begin();
+  accelerometer.setup();
 }
 
 void loop() {
@@ -33,6 +39,10 @@ void loop() {
 
   if(distance <= 10) {
     needToChangeDirection = true;
+  }
+
+  if(++delayAccelerometer >= 500) {
+    delayAccelerometer = 0;
   }
 
   delay(1);
