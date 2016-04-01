@@ -9,7 +9,7 @@ void Accelerometer::setup() {
   Wire.endTransmission(true);
 }
 
-Axes Accelerometer::getValues() {
+Axes Accelerometer::getAccelerationValues() {
   
   Wire.beginTransmission(ACCELEROMETER_ADDRESS);
   Wire.write(0x3B);
@@ -20,14 +20,22 @@ Axes Accelerometer::getValues() {
   int aY = Wire.read() << 8 | Wire.read();
   int aZ = Wire.read() << 8 | Wire.read();
 
+  Axes accelerationAxes;
+
+  accelerationAxes.x= aX - _oldAxes.x;
+  accelerationAxes.y = aY - _oldAxes.y;
+  accelerationAxes.z = aZ - _oldAxes.z;
+
+  _accelerationAxes = accelerationAxes;
+
   Axes axes;
 
   axes.x= aX;
   axes.y = aY;
   axes.z = aZ;
 
-  accelerationAxes = axes;
+  _oldAxes = axes;
 
-  return axes;
+  return _accelerationAxes;
 }
 

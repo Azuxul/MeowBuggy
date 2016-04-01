@@ -5,21 +5,21 @@ UltrasonicSensor::UltrasonicSensor(int echoPin, int trigPin) {
   _echoPin = echoPin;
   _trigPin = trigPin;
 
-  pinMode(_echoPin, OUTPUT);
-  pinMode(_trigPin, INPUT);
+  pinMode(_trigPin, OUTPUT);
+  pinMode(_echoPin, INPUT);
 }
 
 void UltrasonicSensor::sendTriger() {
 
-  digitalWrite(_echoPin, HIGH);
+  digitalWrite(_trigPin, HIGH);
   delayMicroseconds(10);
-  digitalWrite(_echoPin, LOW);
+  digitalWrite(_trigPin, LOW);
 }
 
 double UltrasonicSensor::getDistance() {
   sendTriger();
 
-  unsigned long pulseDuration = pulseIn(_trigPin, HIGH);
+  unsigned long pulseDuration = pulseIn(_echoPin, HIGH);
   return pulseDuration/58;
 }
 

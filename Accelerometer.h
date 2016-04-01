@@ -16,12 +16,13 @@ class Accelerometer {
 public:
 
   // Methods
-  Axes getValues();
+  Axes getAccelerationValues();
   void setup();
 private:
 
   // Variables
-  Axes accelerationAxes;
+  Axes _accelerationAxes;
+  Axes _oldAxes;
 };
 
 #endif

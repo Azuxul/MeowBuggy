@@ -77,6 +77,10 @@ void MotorManager::changeDirectionFromDisatenceArray(int (&distances)[90]) {
 
   degrees -= 45;
 
+  if(higestDistance <= 2) {
+    stop();
+  }
+
   if(higestDistance <= 5 || buffer >= 0) {
 
     buffer--;
@@ -130,5 +134,6 @@ void MotorManager::defualtDirection() {
   setMotorStatus(MOTOR_2_F, HIGH);
   setMotorStatus(MOTOR_3_F, HIGH);
   setMotorStatus(MOTOR_4_F, HIGH);
+
 }
 
