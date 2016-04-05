@@ -2,11 +2,12 @@
 #define UltrasonicSensor_h
 
 #include <Arduino.h>
+#include "Pins.h"
 
 class UltrasonicSensor {
 public:
   // Constructor
-  UltrasonicSensor(int echoPin, int trigPin);
+  UltrasonicSensor();
 
   // Methods
   void sendTriger();

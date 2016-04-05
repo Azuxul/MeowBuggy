@@ -2,20 +2,14 @@
 #include "UltrasonicSensor.h"
 #include "MotorManager.h"
 #include "Accelerometer.h"
+#include "Pins.h"
 #include <Servo.h>
-
-#define ULTRASONIC_ECHO 31
-#define ULTRASONIC_TRIG 30
-#define STATUS_LED 33
-#define BUZZER_PIN 32
-
-#define PRESURE_ADDRESS 0x77
 
 Servo servo;
 int motorLoc;
 bool motorNeg;
 bool needToChangeDirection;
-UltrasonicSensor utlrasonicSensor(ULTRASONIC_ECHO, ULTRASONIC_TRIG);
+UltrasonicSensor utlrasonicSensor;
 MotorManager motorManager;
 Accelerometer accelerometer;
 int distances[90];
@@ -36,28 +30,22 @@ void setup() {
   //accelerometer.setup();
 
   pinMode(STATUS_LED, OUTPUT);
-  pinMode(BUZZER_PIN, OUTPUT);
+  pinMode(BUZZER, OUTPUT);
   digitalWrite(STATUS_LED, HIGH);
-  digitalWrite(BUZZER_PIN, HIGH);
+  digitalWrite(BUZZER, HIGH);
 
   delay(700);
 
-  digitalWrite(BUZZER_PIN, LOW);
+  digitalWrite(BUZZER, LOW);
 }
 
 void loop() {
 
   double distance = utlrasonicSensor.getDistance();
   distances[motorLoc/2] = distance;
-  Serial.println(distance);
 
   if(distance <= 5) {
     needToChangeDirection = true;
-  }
-
-  if(++delayAccelerometer >= 500) {
-    delayAccelerometer = 0;
-    
   }
 
   delay(1);

@@ -2,32 +2,35 @@
 #define MotorManager_h
 
 #include <Arduino.h>
-#include "Motors.h"
-
-// motorState index of values
-#define MOTOR_PIN 0
-#define MOTOR_STATE 1
+#include "Pins.h"
+#include "Direction.h"
+#include "Motor.h"
 
 class MotorManager {
 public:
+
   // Constuctor
-  MotorManager();
+	MotorManager() : _motorLeftFront(MOTOR_FRONT_LEFT_FORWARD, MOTOR_FRONT_LEFT_BACKWARD),
+		_motorRightFront(MOTOR_FRONT_RIGHT_FORWARD, MOTOR_FRONT_RIGHT_BACKWARD),
+		_motorLeftBack(MOTOR_BACK_LEFT_FORWARD, MOTOR_BACK_LEFT_BACKWARD),
+		_motorRightBack(MOTOR_BACK_RIGHT_FORWARD, MOTOR_BACK_RIGHT_BACKWARD) {};
 
   // Methods
   void stop();
-  void setMotorStatus(Motors motor, unsigned int status);
   void changeDirectionFromDisatenceArray(int (&distances)[90]);
   void defualtDirection();
 private:
+
   // Methods
-  void update();
-  void initMotor(Motors motor, unsigned int id);
-  unsigned int getMotorIdFromPin(unsigned int pin);
+  void changeDirection(Direction motorFrontLeft, Direction motorFrontRight, Direction motorBackLeft, Direction motorBackRight);
 
   // Variables
-  int motorState[8][2];
   int buffer;
   bool lastIsDefaultDirection;
+  Motor _motorLeftFront;
+  Motor _motorLeftBack;
+  Motor _motorRightFront;
+  Motor _motorRightBack;
 };
 
 #endif
