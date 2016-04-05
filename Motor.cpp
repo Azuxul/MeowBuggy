@@ -33,9 +33,13 @@ void Motor::changeDirection(Direction direction) {
 		statusMotorForward = HIGH;
 		statusMotorBackward = LOW;
 	}
-	else {
+	else if(direction == BACKWARD) {
 		statusMotorForward = LOW;
 		statusMotorBackward = HIGH;
+	}
+	else {
+		statusMotorForward = LOW;
+		statusMotorBackward = LOW;
 	}
 
 	digitalWrite(_pinForwad, statusMotorForward);

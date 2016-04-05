@@ -4,7 +4,8 @@
 // Enum of possible directions for motor
 enum Direction {
   FORWARD,
-  BACKWARD
+  BACKWARD,
+  STOPED
 };
 
 #endif

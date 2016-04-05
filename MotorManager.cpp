@@ -42,7 +42,7 @@ void MotorManager::changeDirectionFromDisatenceArray(int (&distances)[90]) {
   if(higestDistance <= 5 || buffer >= 0) {
 
     buffer--;
-    
+	changeDirection(BACKWARD, BACKWARD, BACKWARD, BACKWARD);
 
   } else {
 
@@ -50,9 +50,9 @@ void MotorManager::changeDirectionFromDisatenceArray(int (&distances)[90]) {
 
     if(degrees > 0) {
 
-
+		changeDirection(STOPED, FORWARD, FORWARD, FORWARD);
     } else {
-
+		changeDirection(FORWARD, STOPED, FORWARD, FORWARD);
     }
   }
 
