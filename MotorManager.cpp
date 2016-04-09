@@ -21,49 +21,67 @@ void MotorManager::changeDirection(Direction motorFrontLeft, Direction motorFron
   
 }
 
-void MotorManager::changeDirectionFromDisatenceArray(int (&distances)[90]) {
+void MotorManager::changeDirectionFromServoLoc(int servoLoc, int distance) {
 
-  int higestDistance = -1;
-  int degrees = -1;
+	Direction motorFrontLeft;
+	Direction motorFrontRight;
+	Direction motorsBack;
 
-  for(int i = 90; i >= 0; i--) {
-    if(distances[i] > higestDistance) {
-      higestDistance = distances[i];
-      degrees = i;
-    }
-  }
+	stop();
 
-  degrees -= 45;
+	if (distance <= 4) {
+		motorFrontLeft = BACKWARD;
+		motorFrontRight = BACKWARD;
+		motorsBack = BACKWARD;
+	}
 
-  if(higestDistance <= 2) {
-    stop();
-  }
+	switch (servoLoc)
+	{
+	case 0:
+		motorFrontLeft = FORWARD;
+		motorFrontRight = STOPED;
+		motorsBack = FORWARD;
+		break;
+	case 90:
+		motorFrontLeft = STOPED;
+		motorFrontRight = FORWARD;
+		motorsBack = FORWARD;
+		break;
+	case 180:
+		break;
+		motorFrontLeft = BACKWARD;
+		motorFrontRight = BACKWARD;
+		motorsBack = BACKWARD;
+	default:
+		break;
+	}
 
-  if(higestDistance <= 5 || buffer >= 0) {
+	changeDirection(motorFrontLeft, motorFrontRight, motorsBack, motorsBack);
 
-    buffer--;
-	changeDirection(BACKWARD, BACKWARD, BACKWARD, BACKWARD);
+	_lastFrontLeft = motorFrontLeft;
+	_lastFrontRight = motorFrontRight;
+	_lastBackLeft = motorsBack;
+	_lastBackRight = motorsBack;
 
-  } else {
-
-    buffer = 10;
-
-    if(degrees > 0) {
-
-		changeDirection(STOPED, FORWARD, FORWARD, FORWARD);
-    } else {
-		changeDirection(FORWARD, STOPED, FORWARD, FORWARD);
-    }
-  }
-
-  lastIsDefaultDirection = false;
+	lastDirection = true;
+	buffer = 8;
 }
 
 void MotorManager::defualtDirection() {
 
-  buffer = 10;
 
-  changeDirection(FORWARD, FORWARD, FORWARD, FORWARD);
+	if (lastDirection) {
+
+		changeDirection(_lastFrontLeft, _lastFrontRight, _lastBackLeft, _lastBackRight);
+
+		if (--buffer <= 0) {
+			lastDirection = false;
+		}
+
+	}
+	else {
+		changeDirection(FORWARD, FORWARD, FORWARD, FORWARD);
+	}
 
 }
 

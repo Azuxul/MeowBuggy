@@ -24,8 +24,6 @@ void Motor::stop() {
 
 void Motor::changeDirection(Direction direction) {
 
-	Serial.println(_pinForwad);
-
 	uint8_t statusMotorForward;
 	uint8_t statusMotorBackward;
 

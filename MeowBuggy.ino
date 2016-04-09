@@ -2,16 +2,16 @@
 #include "MotorManager.h"
 #include "Accelerometer.h"
 #include "Pins.h"
+#include "Direction.h"
 #include <Servo.h>
 
 Servo servo;
 int motorLoc;
-bool motorNeg;
-bool needToChangeDirection;
+bool motorPossitiveLoc;
 UltrasonicSensor utlrasonicSensor;
 MotorManager motorManager;
 Accelerometer accelerometer;
-int distances[90];
+int distances[3];
 int delayAccelerometer;
 
 void setup() {
@@ -40,37 +40,43 @@ void setup() {
 
 void loop() {
 
-  double distance = utlrasonicSensor.getDistance();
-  distances[motorLoc/2] = distance;
+	if (servo.attached()) {
 
-  if(distance <= 5) {
-    needToChangeDirection = true;
-  }
+		double distance = utlrasonicSensor.getDistance();
 
-  delay(1);
+		if (distance <= 1) {
+			motorManager.stop();
+		}
 
-  updateServoMotor();
+		if (distance <= 8) {
+			motorManager.changeDirectionFromServoLoc(motorLoc, distance);
+		}
+		else {
+			motorManager.defualtDirection();
+		}
+
+		delay(1);
+
+		updateServoMotor();
+	}
+	else {
+		motorManager.stop();
+	}
 }
 
 void updateServoMotor() {
   
-  if(motorNeg) {
-    motorLoc-=2;
-  } else {
-    motorLoc+=2;
-  }
+	servo.write(motorLoc); 
 
-  if(motorLoc <= 0 || motorLoc > 180) {
-    motorNeg = !motorNeg;
+	delay(200);
 
-    if(needToChangeDirection) {
-      needToChangeDirection = false;
-      motorManager.changeDirectionFromDisatenceArray(distances);
-    } else {
-      motorManager.defualtDirection();
-    }
-  }
+	if (motorLoc >= 180) {
+		motorPossitiveLoc = false;
+	}
+	else if (motorLoc <= 0) {
+		motorPossitiveLoc = true;
+	}
 
-  servo.write(motorLoc);
+	motorLoc += motorPossitiveLoc ? 90 : -90;
 }
 
