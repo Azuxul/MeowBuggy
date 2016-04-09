@@ -1,5 +1,4 @@
-#ifndef UltrasonicSensor_h
-#define UltrasonicSensor_h
+#pragma once
 
 #include <Arduino.h>
 #include "Pins.h"
@@ -19,5 +18,3 @@ private:
   int _echoPin;
   int _trigPin;
 };
-
-#endif

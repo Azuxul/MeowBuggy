@@ -1,5 +1,4 @@
-#ifndef Pins_h
-#define Pins_h
+#pragma once
 
 // Ultrasonic sensor pins
 #define ULTRASONIC_ECHO             31
@@ -22,6 +21,4 @@
 // Others pins
 #define STATUS_LED                  33
 #define BUZZER                      32
-
-#endif
 

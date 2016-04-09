@@ -1,5 +1,4 @@
-#ifndef Direction_h
-#define Direction_h
+#pragma once
 
 // Enum of possible directions for motor
 enum Direction {
@@ -7,5 +6,3 @@ enum Direction {
   BACKWARD,
   STOPED
 };
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef Accelerometer_h
-#define Accelerometer_h
+#pragma once
 
 #include <Arduino.h>
 #include <Wire.h>
@@ -24,6 +23,3 @@ private:
   Axes _accelerationAxes;
   Axes _oldAxes;
 };
-
-#endif
-

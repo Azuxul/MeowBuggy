@@ -1,7 +1,8 @@
+#pragma once
+
 #include <Arduino.h>
 #include <SoftwareSerial.h>
 
-#pragma once
 class BluetoothManager
 {
 public:
@@ -9,4 +10,3 @@ public:
 private:
 	SoftwareSerial serialConnexion;
 };
-

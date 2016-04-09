@@ -1,5 +1,4 @@
-#ifndef Motor_h
-#define Motor_h
+#pragma once
 
 #include <Arduino.h>
 #include "Direction.h"
@@ -19,6 +18,4 @@ private:
 	int _pinForwad;
 	int _pinBackward;
 };
-
-#endif
 

@@ -1,5 +1,4 @@
-#ifndef MotorManager_h
-#define MotorManager_h
+#pragma once
 
 #include <Arduino.h>
 #include "Pins.h"
@@ -34,6 +33,4 @@ private:
 	Motor _motorRightFront;
 	Motor _motorRightBack;
 };
-
-#endif
 
