@@ -1,10 +1,11 @@
 #include <SoftwareSerial.h>
+#include <Servo.h>
 #include "UltrasonicSensor.h"
 #include "MotorManager.h"
 #include "Accelerometer.h"
 #include "Pins.h"
 #include "Direction.h"
-#include <Servo.h>
+#include "BluetoothManager.h"
 
 Servo servo;
 int motorLoc;
@@ -12,6 +13,7 @@ bool motorPossitiveLoc;
 UltrasonicSensor utlrasonicSensor;
 MotorManager motorManager;
 Accelerometer accelerometer;
+BluetoothManager bluetoothManager(motorManager);
 int distances[3];
 int delayAccelerometer;
 
@@ -37,6 +39,10 @@ void setup() {
   delay(700);
 
   digitalWrite(BUZZER, LOW);
+
+  SoftwareSerial a(BLUETOOTH_SERIAL_RXD, BLUETOOTH_SERIAL_TXD);
+
+  a.println("aa");
 }
 
 void loop() {
@@ -63,6 +69,9 @@ void loop() {
 	else {
 		motorManager.stop();
 	}
+
+	bluetoothManager.update();
+
 }
 
 void updateServoMotor() {

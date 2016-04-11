@@ -14,10 +14,15 @@ void MotorManager::stop() {
 
 void MotorManager::changeDirection(Direction motorFrontLeft, Direction motorFrontRight, Direction motorBackLeft, Direction motorBackRight) {
 
-	_motorLeftFront.changeDirection(motorFrontLeft);
-	_motorRightFront.changeDirection(motorFrontRight);
-	_motorLeftBack.changeDirection(motorBackLeft);
-	_motorRightBack.changeDirection(motorBackRight);
+
+	if(motorFrontLeft != IGNORE)
+		_motorLeftFront.changeDirection(motorFrontLeft);
+	if (motorFrontRight != IGNORE)
+		_motorRightFront.changeDirection(motorFrontRight);
+	if (motorBackLeft != IGNORE)
+		_motorLeftBack.changeDirection(motorBackLeft);
+	if (motorBackRight != IGNORE)
+		_motorRightBack.changeDirection(motorBackRight);
   
 }
 

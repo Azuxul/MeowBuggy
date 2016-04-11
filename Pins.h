@@ -15,10 +15,9 @@
 #define MOTOR_BACK_RIGHT_BACKWARD   29
 
 // Bluetooth pins
-#define BLUETOOTH_SERIAL_RXD		-1
-#define BLUETOOTH_SERIAL_TXD		-1
+#define BLUETOOTH_SERIAL_RXD		12
+#define BLUETOOTH_SERIAL_TXD		13
 
 // Others pins
 #define STATUS_LED                  33
 #define BUZZER                      32
-

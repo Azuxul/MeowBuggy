@@ -4,5 +4,6 @@
 enum Direction {
   FORWARD,
   BACKWARD,
-  STOPED
+  STOPED,
+  IGNORE
 };
