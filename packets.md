@@ -1,8 +1,11 @@
 # Packets list
 
 Packet protorcol :
-Packet name : Packet ID | Packet args0(tpye);Packet args1(tpye);...
-Packet ID;Packet args0;Packet args1;...;
+Packet info : Packet name : Packet ID | Packet args0(tpye);Packet args1(tpye);...
+
+Packet data : Packet ID;Packet args0;Packet args1;...;
+
+Exemple for motor direction packet : 0x01;0x01;0x03;0x00;0x00;
 
 Max packet args is 9 !
 
