@@ -33,19 +33,28 @@ void BluetoothManager::update() {
 		}
 	}
 
-	switch (commands[0])
-	{
-	case 0x01: // Motor packet
-		updateMotorFromPacket(commands);
-		break;
-	case 0x02:
-		motorManager.stop();
-		break;
-	case 0x03:
-		// TODO: Add manual mode
-		break;
-	default:
-		break;
+	if (commands[0] != 0x00) {
+
+		Serial.println(commands[0]);
+		Serial.println(commands[1] == 0x01);
+
+		switch (commands[0])
+		{
+		case 0x01: // Motor direction packet
+			updateMotorFromPacket(commands);
+			break;
+		case 0x02: // Motor stop packet
+			motorManager.stop();
+			break;
+		case 0x03: // Motor auto mode packet
+			motorManager.setAutoMode(commands[1] == 0x01);
+			break;
+		case 0x04: // Motor inpulse direction mode packet
+			motorManager.setImpulseDirectionMode(commands[1] == 0x01);
+			break;
+		default:
+			break;
+		}
 	}
 	
 }

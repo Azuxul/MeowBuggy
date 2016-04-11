@@ -19,10 +19,24 @@ public:
 	void defualtDirection();
 	void changeDirection(Direction motorFrontLeft, Direction motorFrontRight, Direction motorBackLeft, Direction motorBackRight);
 	void changeDirectionFromServoLoc(int servoLoc, int distance);
+	bool getAutoMode() {
+		return autoMode;
+	}
+	bool getImpulseDirectionMode() {
+		return impulseDirectionMode;
+	}
+	void setAutoMode(bool autoMode) {
+		MotorManager::autoMode = autoMode;
+	}
+	void setImpulseDirectionMode(bool impulseDirectionMode) {
+		MotorManager::impulseDirectionMode = impulseDirectionMode;
+	}
 private:
 
 	// Variables
 	bool lastDirection;
+	bool autoMode = true;
+	bool impulseDirectionMode = false;
 	int buffer;
 	Direction _lastFrontLeft;
 	Direction _lastFrontRight;

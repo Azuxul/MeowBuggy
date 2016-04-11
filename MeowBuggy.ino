@@ -1,4 +1,3 @@
-#include <SoftwareSerial.h>
 #include <Servo.h>
 #include "UltrasonicSensor.h"
 #include "MotorManager.h"
@@ -14,6 +13,7 @@ UltrasonicSensor utlrasonicSensor;
 MotorManager motorManager;
 Accelerometer accelerometer;
 BluetoothManager bluetoothManager(motorManager);
+int stopBuffer;
 int distances[3];
 int delayAccelerometer;
 
@@ -39,39 +39,42 @@ void setup() {
   delay(700);
 
   digitalWrite(BUZZER, LOW);
-
-  SoftwareSerial a(BLUETOOTH_SERIAL_RXD, BLUETOOTH_SERIAL_TXD);
-
-  a.println("aa");
 }
 
 void loop() {
 
-	if (servo.attached()) {
+	if (motorManager.getAutoMode()) {
+		if (servo.attached()) {
 
-		double distance = utlrasonicSensor.getDistance();
+			double distance = utlrasonicSensor.getDistance();
 
-		if (distance <= 1) {
-			motorManager.stop();
-		}
+			if (distance <= 1) {
+				motorManager.stop();
+			}
 
-		if (distance <= 8) {
-			motorManager.changeDirectionFromServoLoc(motorLoc, distance);
+			if (distance <= 8) {
+				motorManager.changeDirectionFromServoLoc(motorLoc, distance);
+			}
+			else {
+				motorManager.defualtDirection();
+			}
+
+			delay(1);
+
+			updateServoMotor();
 		}
 		else {
-			motorManager.defualtDirection();
+			motorManager.stop();
 		}
+	} 
+	else if (motorManager.getImpulseDirectionMode() && ++stopBuffer >= 250) {
 
-		delay(1);
-
-		updateServoMotor();
-	}
-	else {
+		stopBuffer = 0;
 		motorManager.stop();
 	}
 
 	bluetoothManager.update();
-
+	delay(1);
 }
 
 void updateServoMotor() {
