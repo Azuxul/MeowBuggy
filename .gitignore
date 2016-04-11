@@ -1,6 +1,7 @@
 *.vcxproj
 *.filters
 /__vm
+*.sln
 
 # Object files
 *.o
