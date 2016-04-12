@@ -4,7 +4,7 @@
 #include "MotorManager.h"
 #include "Direction.h"
 
-BluetoothManager::BluetoothManager(MotorManager motorManager) : serialConnexion(BLUETOOTH_SERIAL_RXD, BLUETOOTH_SERIAL_TXD), motorManager(motorManager) {
+BluetoothManager::BluetoothManager(MotorManager& motorManager) : serialConnexion(BLUETOOTH_SERIAL_RXD, BLUETOOTH_SERIAL_TXD), motorManager(motorManager) {
 
 	serialConnexion.begin(SPEED);
 }

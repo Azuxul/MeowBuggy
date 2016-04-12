@@ -1,3 +1,5 @@
+#include <Wire.h>
+#include <SoftwareSerial.h>
 #include <Servo.h>
 #include "UltrasonicSensor.h"
 #include "MotorManager.h"

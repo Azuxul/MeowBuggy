@@ -11,7 +11,7 @@ class BluetoothManager
 {
 public:
 
-	BluetoothManager(MotorManager motorManager);
+	BluetoothManager(MotorManager& motorManager);
 
 	void update();
 private:
@@ -19,5 +19,5 @@ private:
 	void updateMotorFromPacket(int (&packet)[10]);
 
 	SoftwareSerial serialConnexion;
-	MotorManager motorManager;
+	MotorManager& motorManager;
 };
