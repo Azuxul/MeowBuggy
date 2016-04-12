@@ -23,7 +23,7 @@ void setup() {
 
   Serial.begin(9600);
 
-  servo.attach(2);
+  servo.attach(SERVO_MOTOR);
   servo.write(0);
 
   motorLoc = 180;
@@ -46,37 +46,48 @@ void setup() {
 void loop() {
 
 	if (motorManager.getAutoMode()) {
-		if (servo.attached()) {
-
-			double distance = utlrasonicSensor.getDistance();
-
-			if (distance <= 1) {
-				motorManager.stop();
-			}
-
-			if (distance <= 8) {
-				motorManager.changeDirectionFromServoLoc(motorLoc, distance);
-			}
-			else {
-				motorManager.defualtDirection();
-			}
-
-			delay(1);
-
-			updateServoMotor();
-		}
-		else {
-			motorManager.stop();
-		}
-	} 
-	else if (motorManager.getImpulseDirectionMode() && ++stopBuffer >= 250) {
+		autoMode();
+	}
+	else {
+		servo.detach();
+	}
+	
+	if (motorManager.getImpulseDirectionMode() && ++stopBuffer >= 250) {
 
 		stopBuffer = 0;
 		motorManager.stop();
 	}
 
-	bluetoothManager.update();
+	if(digitalRead(BLUETOOTH_STAUS) == HIGH)
+		bluetoothManager.update();
+
 	delay(1);
+}
+
+void autoMode() {
+	if (servo.attached()) {
+
+		double distance = utlrasonicSensor.getDistance();
+
+		if (distance <= 1) {
+			motorManager.stop();
+		}
+
+		if (distance <= 8) {
+			motorManager.changeDirectionFromServoLoc(motorLoc, distance);
+		}
+		else {
+			motorManager.defualtDirection();
+		}
+
+		delay(1);
+
+		updateServoMotor();
+	}
+	else {
+		motorManager.stop();
+		servo.attach(SERVO_MOTOR);
+	}
 }
 
 void updateServoMotor() {
