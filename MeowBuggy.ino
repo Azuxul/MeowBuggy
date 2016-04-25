@@ -1,98 +1,80 @@
-#include <Wire.h>
 #include <SoftwareSerial.h>
-#include <Servo.h>
 #include "UltrasonicSensor.h"
 #include "MotorManager.h"
-#include "Accelerometer.h"
 #include "Pins.h"
 #include "Direction.h"
-#include "BluetoothManager.h"
+#include <Servo.h>
 
 Servo servo;
 int motorLoc;
 bool motorPossitiveLoc;
 UltrasonicSensor utlrasonicSensor;
 MotorManager motorManager;
-Accelerometer accelerometer;
-BluetoothManager bluetoothManager(motorManager);
-int stopBuffer;
 int distances[3];
 int delayAccelerometer;
 
 void setup() {
 
-  Serial.begin(9600);
+	Serial.begin(9600);
 
-  servo.attach(SERVO_MOTOR);
-  servo.write(0);
+	servo.attach(2);
+	servo.write(0);
 
-  motorLoc = 180;
+	motorLoc = 180;
 
-  motorManager.defualtDirection();
+	motorManager.defualtDirection();
 
-  Wire.begin();
-  //accelerometer.setup();
+	pinMode(STATUS_LED, OUTPUT);
+	pinMode(BUZZER, OUTPUT);
+	pinMode(LINE_TRAKER, INPUT);
+	digitalWrite(STATUS_LED, HIGH);
+	digitalWrite(BUZZER, HIGH);
 
-  pinMode(STATUS_LED, OUTPUT);
-  pinMode(BUZZER, OUTPUT);
-  digitalWrite(STATUS_LED, HIGH);
-  digitalWrite(BUZZER, HIGH);
+	delay(700);
 
-  delay(700);
-
-  digitalWrite(BUZZER, LOW);
+	digitalWrite(BUZZER, LOW);
 }
 
 void loop() {
 
-	if (motorManager.getAutoMode()) {
-		autoMode();
+	if (motorManager.getBlackLineMode()) {
+		if (digitalRead(LINE_TRAKER) == HIGH) {
+			motorManager.changeDirection(FORWARD, FORWARD, FORWARD, FORWARD);
+		}
+		else
+		{
+			motorManager.changeDirection(STOPED, STOPED, STOPED, STOPED);
+		}
 	}
 	else {
-		servo.detach();
-	}
-	
-	if (motorManager.getImpulseDirectionMode() && ++stopBuffer >= 250) {
+		if (servo.attached()) {
 
-		stopBuffer = 0;
-		motorManager.stop();
-	}
+			double distance = utlrasonicSensor.getDistance();
 
-	if(digitalRead(BLUETOOTH_STAUS) == HIGH)
-		bluetoothManager.update();
+			if (distance <= 1) {
+				motorManager.stop();
+			}
 
-	delay(1);
-}
+			if (distance <= 8) {
+				motorManager.changeDirectionFromServoLoc(motorLoc, distance);
+			}
+			else {
+				motorManager.defualtDirection();
+			}
 
-void autoMode() {
-	if (servo.attached()) {
+			delay(1);
 
-		double distance = utlrasonicSensor.getDistance();
-
-		if (distance <= 1) {
-			motorManager.stop();
-		}
-
-		if (distance <= 8) {
-			motorManager.changeDirectionFromServoLoc(motorLoc, distance);
+			updateServoMotor();
 		}
 		else {
-			motorManager.defualtDirection();
+			motorManager.stop();
 		}
-
-		delay(1);
-
-		updateServoMotor();
-	}
-	else {
-		motorManager.stop();
-		servo.attach(SERVO_MOTOR);
 	}
 }
 
 void updateServoMotor() {
-  
-	servo.write(motorLoc); 
+
+	servo.write(motorLoc);
 
 	delay(200);
 

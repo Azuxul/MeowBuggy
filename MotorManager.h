@@ -31,12 +31,19 @@ public:
 	void setImpulseDirectionMode(bool impulseDirectionMode) {
 		MotorManager::impulseDirectionMode = impulseDirectionMode;
 	}
+	bool getBlackLineMode() {
+		return useBlackLine;
+	}
+	void setBlackLineMode(bool blackLine) {
+		MotorManager::useBlackLine = blackLine;
+	}
 private:
 
 	// Variables
 	bool lastDirection;
 	bool autoMode = true;
 	bool impulseDirectionMode = false;
+	bool useBlackLine = false;
 	int buffer;
 	Direction _lastFrontLeft;
 	Direction _lastFrontRight;

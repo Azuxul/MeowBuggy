@@ -31,7 +31,7 @@ void Motor::changeDirection(Direction direction) {
 		statusMotorForward = HIGH;
 		statusMotorBackward = LOW;
 	}
-	else if(direction == BACKWARD) {
+	else if (direction == BACKWARD) {
 		statusMotorForward = LOW;
 		statusMotorBackward = HIGH;
 	}

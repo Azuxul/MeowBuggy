@@ -15,7 +15,7 @@ void MotorManager::stop() {
 void MotorManager::changeDirection(Direction motorFrontLeft, Direction motorFrontRight, Direction motorBackLeft, Direction motorBackRight) {
 
 
-	if(motorFrontLeft != IGNORE)
+	if (motorFrontLeft != IGNORE)
 		_motorLeftFront.changeDirection(motorFrontLeft);
 	if (motorFrontRight != IGNORE)
 		_motorRightFront.changeDirection(motorFrontRight);
@@ -23,7 +23,7 @@ void MotorManager::changeDirection(Direction motorFrontLeft, Direction motorFron
 		_motorLeftBack.changeDirection(motorBackLeft);
 	if (motorBackRight != IGNORE)
 		_motorRightBack.changeDirection(motorBackRight);
-  
+
 }
 
 void MotorManager::changeDirectionFromServoLoc(int servoLoc, int distance) {

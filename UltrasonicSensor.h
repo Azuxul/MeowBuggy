@@ -5,16 +5,16 @@
 
 class UltrasonicSensor {
 public:
-  // Constructor
-  UltrasonicSensor();
+	// Constructor
+	UltrasonicSensor();
 
-  // Methods
-  void sendTriger();
-  double getDistance();
-  
+	// Methods
+	void sendTriger();
+	double getDistance();
+
 private:
 
-  // Globals variables
-  int _echoPin;
-  int _trigPin;
+	// Globals variables
+	int _echoPin;
+	int _trigPin;
 };

@@ -21,5 +21,6 @@
 #define BLUETOOTH_STAUS				35
 
 // Others pins
+#define LINE_TRAKER					34
 #define STATUS_LED                  33
 #define BUZZER                      32

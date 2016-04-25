@@ -12,7 +12,7 @@ BluetoothManager::BluetoothManager(MotorManager& motorManager) : serialConnexion
 void BluetoothManager::update() {
 
 	String dataBuffer = "";
-	int commands[10] = {0x00};
+	int commands[10] = { 0x00 };
 	int indexOfArray = 0;
 	const char separator = ';';
 
@@ -22,7 +22,7 @@ void BluetoothManager::update() {
 
 		if (c == separator) {
 
-			if(indexOfArray < 10) {
+			if (indexOfArray < 10) {
 				commands[indexOfArray] = dataBuffer.toInt();
 				indexOfArray++;
 				dataBuffer = "";
@@ -52,14 +52,17 @@ void BluetoothManager::update() {
 		case 0x04: // Motor inpulse direction mode packet
 			motorManager.setImpulseDirectionMode(commands[1] == 0x01);
 			break;
+		case 0x05: // Blck line detector
+			motorManager.setBlackLineMode(commands[1] == 0x01);
+			break;
 		default:
 			break;
 		}
 	}
-	
+
 }
 
-void BluetoothManager::updateMotorFromPacket(int (&packet)[10]) {
+void BluetoothManager::updateMotorFromPacket(int(&packet)[10]) {
 
 	Direction motorDirections[4] = { IGNORE };
 
