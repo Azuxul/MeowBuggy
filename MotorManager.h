@@ -1,34 +1,57 @@
-#ifndef MotorManager_h
-#define MotorManager_h
+#pragma once
 
 #include <Arduino.h>
-#include "Motors.h"
-
-// motorState index of values
-#define MOTOR_PIN 0
-#define MOTOR_STATE 1
+#include "Pins.h"
+#include "Direction.h"
+#include "Motor.h"
 
 class MotorManager {
 public:
-  // Constuctor
-  MotorManager();
 
-  // Methods
-  void stop();
-  void setMotorStatus(Motors motor, unsigned int status);
-  void changeDirectionFromDisatenceArray(int (&distances)[90]);
-  void defualtDirection();
+	// Constuctor
+	MotorManager() : _motorLeftFront(MOTOR_FRONT_LEFT_FORWARD, MOTOR_FRONT_LEFT_BACKWARD),
+		_motorRightFront(MOTOR_FRONT_RIGHT_FORWARD, MOTOR_FRONT_RIGHT_BACKWARD),
+		_motorLeftBack(MOTOR_BACK_LEFT_FORWARD, MOTOR_BACK_LEFT_BACKWARD),
+		_motorRightBack(MOTOR_BACK_RIGHT_FORWARD, MOTOR_BACK_RIGHT_BACKWARD) {};
+
+	// Methods
+	void stop();
+	void defualtDirection();
+	void changeDirection(Direction motorFrontLeft, Direction motorFrontRight, Direction motorBackLeft, Direction motorBackRight);
+	void changeDirectionFromServoLoc(int servoLoc, int distance);
+	bool getAutoMode() {
+		return autoMode;
+	}
+	bool getImpulseDirectionMode() {
+		return impulseDirectionMode;
+	}
+	void setAutoMode(bool autoMode) {
+		MotorManager::autoMode = autoMode;
+	}
+	void setImpulseDirectionMode(bool impulseDirectionMode) {
+		MotorManager::impulseDirectionMode = impulseDirectionMode;
+	}
+	bool getBlackLineMode() {
+		return useBlackLine;
+	}
+	void setBlackLineMode(bool blackLine) {
+		MotorManager::useBlackLine = blackLine;
+	}
 private:
-  // Methods
-  void update();
-  void initMotor(Motors motor, unsigned int id);
-  unsigned int getMotorIdFromPin(unsigned int pin);
 
-  // Variables
-  int motorState[8][2];
-  int buffer;
-  bool lastIsDefaultDirection;
+	// Variables
+	bool lastDirection;
+	bool autoMode = true;
+	bool impulseDirectionMode = false;
+	bool useBlackLine = false;
+	int buffer;
+	Direction _lastFrontLeft;
+	Direction _lastFrontRight;
+	Direction _lastBackLeft;
+	Direction _lastBackRight;
+	Motor _motorLeftFront;
+	Motor _motorLeftBack;
+	Motor _motorRightFront;
+	Motor _motorRightBack;
 };
-
-#endif
 

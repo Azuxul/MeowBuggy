@@ -1,134 +1,92 @@
 #include <Arduino.h>
 #include "MotorManager.h"
-#include "Motors.h"
-
-MotorManager::MotorManager() {
-
-  // Init motors
-  initMotor(MOTOR_1_F, 23);
-  initMotor(MOTOR_1_B, 22);
-  initMotor(MOTOR_2_F, 25);
-  initMotor(MOTOR_2_B, 24);
-  initMotor(MOTOR_3_F, 26);
-  initMotor(MOTOR_3_B, 27);
-  initMotor(MOTOR_4_F, 28);
-  initMotor(MOTOR_4_B, 29);
-
-  update();
-}
-
-void MotorManager::initMotor(Motors motor, unsigned int pin) {
-  motorState[motor][MOTOR_PIN] = pin;
-  motorState[motor][MOTOR_STATE] = LOW;
-
-  pinMode(motor, OUTPUT);
-}
-
-void MotorManager::update() {
-
-  unsigned int motorArraySize = sizeof(motorState);
-  for(int i = motorArraySize; i >= 0; i--) {
-    digitalWrite(motorState[i][MOTOR_PIN], motorState[i][MOTOR_STATE]);
-  }
-}
-
-unsigned int MotorManager::getMotorIdFromPin(unsigned int pin) {
-
-  unsigned int resultMotorId = -1;
-  unsigned int motorArraySize = sizeof(motorState);
-  
-  for(int i = motorArraySize; i >= 0; i--) {
-    if(motorState[i][MOTOR_PIN] == pin) {
-      resultMotorId = i;
-      break;
-    }
-  }
-
-  return resultMotorId;
-}
+#include "Pins.h"
+#include "Direction.h"
+#include "Motor.h"
 
 void MotorManager::stop() {
-  
-  unsigned int motorArraySize = sizeof(motorState);
-  
-  for(unsigned int i = motorArraySize; i >= 0; i--) {
-    motorState[i][MOTOR_STATE] = LOW;
-    digitalWrite(motorState[i][MOTOR_PIN], LOW);
-  }
+
+	_motorLeftFront.stop();
+	_motorRightFront.stop();
+	_motorLeftBack.stop();
+	_motorRightBack.stop();
 }
 
-void MotorManager::setMotorStatus(Motors motor, unsigned int status) {
+void MotorManager::changeDirection(Direction motorFrontLeft, Direction motorFrontRight, Direction motorBackLeft, Direction motorBackRight) {
 
-   motorState[motor][MOTOR_STATE] = status;
-   digitalWrite(motorState[motor][MOTOR_PIN], status);
+
+	if (motorFrontLeft != IGNORE)
+		_motorLeftFront.changeDirection(motorFrontLeft);
+	if (motorFrontRight != IGNORE)
+		_motorRightFront.changeDirection(motorFrontRight);
+	if (motorBackLeft != IGNORE)
+		_motorLeftBack.changeDirection(motorBackLeft);
+	if (motorBackRight != IGNORE)
+		_motorRightBack.changeDirection(motorBackRight);
+
 }
 
-void MotorManager::changeDirectionFromDisatenceArray(int (&distances)[90]) {
+void MotorManager::changeDirectionFromServoLoc(int servoLoc, int distance) {
 
-  int higestDistance = -1;
-  int degrees = -1;
+	Direction motorFrontLeft;
+	Direction motorFrontRight;
+	Direction motorsBack;
 
-  for(int i = 90; i >= 0; i--) {
-    if(distances[i] > higestDistance) {
-      higestDistance = distances[i];
-      degrees = i;
-    }
-  }
+	stop();
 
-  degrees -= 45;
+	if (distance <= 4) {
+		motorFrontLeft = BACKWARD;
+		motorFrontRight = BACKWARD;
+		motorsBack = BACKWARD;
+	}
 
-  if(higestDistance <= 5 || buffer >= 0) {
+	switch (servoLoc)
+	{
+	case 0:
+		motorFrontLeft = FORWARD;
+		motorFrontRight = STOPED;
+		motorsBack = FORWARD;
+		break;
+	case 90:
+		motorFrontLeft = STOPED;
+		motorFrontRight = FORWARD;
+		motorsBack = FORWARD;
+		break;
+	case 180:
+		break;
+		motorFrontLeft = BACKWARD;
+		motorFrontRight = BACKWARD;
+		motorsBack = BACKWARD;
+	default:
+		break;
+	}
 
-    buffer--;
-    
-    setMotorStatus(MOTOR_1_F, LOW); 
-    setMotorStatus(MOTOR_2_F, LOW);
-    setMotorStatus(MOTOR_3_F, LOW);
-    setMotorStatus(MOTOR_4_F, LOW);
-    setMotorStatus(MOTOR_1_B, HIGH);
-    setMotorStatus(MOTOR_2_B, HIGH);
-    setMotorStatus(MOTOR_3_B, HIGH);
-    setMotorStatus(MOTOR_4_B, HIGH);
-  } else {
+	changeDirection(motorFrontLeft, motorFrontRight, motorsBack, motorsBack);
 
-    buffer = 10;
+	_lastFrontLeft = motorFrontLeft;
+	_lastFrontRight = motorFrontRight;
+	_lastBackLeft = motorsBack;
+	_lastBackRight = motorsBack;
 
-    setMotorStatus(MOTOR_1_B, LOW); 
-    setMotorStatus(MOTOR_2_B, LOW);
-    setMotorStatus(MOTOR_3_B, LOW);
-    setMotorStatus(MOTOR_4_B, LOW);
-    setMotorStatus(MOTOR_3_F, HIGH);
-    setMotorStatus(MOTOR_4_F, HIGH);
-
-    if(degrees > 0) {
-
-      setMotorStatus(MOTOR_1_F, HIGH);
-      setMotorStatus(MOTOR_2_F, LOW);
-    } else {
-      setMotorStatus(MOTOR_1_F, LOW);
-      setMotorStatus(MOTOR_2_F, HIGH);
-    }
-  }
-
-  lastIsDefaultDirection = false;
+	lastDirection = true;
+	buffer = 8;
 }
 
 void MotorManager::defualtDirection() {
 
-  buffer = 10;
 
-  if(!lastIsDefaultDirection) {
-    setMotorStatus(MOTOR_1_B, LOW);
-    setMotorStatus(MOTOR_2_B, LOW);
-    setMotorStatus(MOTOR_3_B, LOW);
-    setMotorStatus(MOTOR_4_B, LOW);
-  }
+	if (lastDirection) {
 
-  lastIsDefaultDirection = true;
+		changeDirection(_lastFrontLeft, _lastFrontRight, _lastBackLeft, _lastBackRight);
 
-  setMotorStatus(MOTOR_1_F, HIGH);
-  setMotorStatus(MOTOR_2_F, HIGH);
-  setMotorStatus(MOTOR_3_F, HIGH);
-  setMotorStatus(MOTOR_4_F, HIGH);
+		if (--buffer <= 0) {
+			lastDirection = false;
+		}
+
+	}
+	else {
+		changeDirection(FORWARD, FORWARD, FORWARD, FORWARD);
+	}
+
 }
 

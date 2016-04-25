@@ -1,23 +1,20 @@
-#ifndef UltrasonicSensor_h
-#define UltrasonicSensor_h
+#pragma once
 
 #include <Arduino.h>
+#include "Pins.h"
 
 class UltrasonicSensor {
 public:
-  // Constructor
-  UltrasonicSensor(int echoPin, int trigPin);
+	// Constructor
+	UltrasonicSensor();
 
-  // Methods
-  void sendTriger();
-  double getDistance();
-  
+	// Methods
+	void sendTriger();
+	double getDistance();
+
 private:
 
-  // Globals variables
-  int _echoPin;
-  int _trigPin;
+	// Globals variables
+	int _echoPin;
+	int _trigPin;
 };
-
-#endif
-

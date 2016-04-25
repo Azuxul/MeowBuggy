@@ -1,25 +1,24 @@
 #include <Arduino.h>
 #include "UltrasonicSensor.h"
+#include "Pins.h"
 
-UltrasonicSensor::UltrasonicSensor(int echoPin, int trigPin) {
-  _echoPin = echoPin;
-  _trigPin = trigPin;
-
-  pinMode(_echoPin, OUTPUT);
-  pinMode(_trigPin, INPUT);
+UltrasonicSensor::UltrasonicSensor() {
+  
+  pinMode(ULTRASONIC_TRIG, OUTPUT);
+  pinMode(ULTRASONIC_ECHO, INPUT);
 }
 
 void UltrasonicSensor::sendTriger() {
 
-  digitalWrite(_echoPin, HIGH);
+  digitalWrite(ULTRASONIC_TRIG, HIGH);
   delayMicroseconds(10);
-  digitalWrite(_echoPin, LOW);
+  digitalWrite(ULTRASONIC_TRIG, LOW);
 }
 
 double UltrasonicSensor::getDistance() {
   sendTriger();
 
-  unsigned long pulseDuration = pulseIn(_trigPin, HIGH);
+  unsigned long pulseDuration = pulseIn(ULTRASONIC_ECHO, HIGH);
   return pulseDuration/58;
 }
 

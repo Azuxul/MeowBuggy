@@ -1,64 +1,90 @@
-#include "Motors.h"
+#include <SoftwareSerial.h>
 #include "UltrasonicSensor.h"
 #include "MotorManager.h"
+#include "Pins.h"
+#include "Direction.h"
 #include <Servo.h>
-
-#define ULTRASONIC_ECHO 30
-#define ULTRASONIC_TRIG 31
 
 Servo servo;
 int motorLoc;
-bool motorNeg;
-bool needToChangeDirection;
-UltrasonicSensor utlrasonicSensor(ULTRASONIC_ECHO, ULTRASONIC_TRIG);
+bool motorPossitiveLoc;
+UltrasonicSensor utlrasonicSensor;
 MotorManager motorManager;
-int distances[90];
+int distances[3];
+int delayAccelerometer;
 
 void setup() {
 
-  Serial.begin(9600);
+	Serial.begin(9600);
 
-  servo.attach(2);
-  servo.write(0);
+	servo.attach(2);
+	servo.write(0);
 
-  motorLoc = 180;
+	motorLoc = 180;
 
-  motorManager.defualtDirection();
+	motorManager.defualtDirection();
+
+	pinMode(STATUS_LED, OUTPUT);
+	pinMode(BUZZER, OUTPUT);
+	pinMode(LINE_TRAKER, INPUT);
+	digitalWrite(STATUS_LED, HIGH);
+	digitalWrite(BUZZER, HIGH);
+
+	delay(700);
+
+	digitalWrite(BUZZER, LOW);
 }
 
 void loop() {
 
-  double distance = utlrasonicSensor.getDistance();
-  distances[motorLoc/2] = distance;
+	if (motorManager.getBlackLineMode()) {
+		if (digitalRead(LINE_TRAKER) == HIGH) {
+			motorManager.changeDirection(FORWARD, FORWARD, FORWARD, FORWARD);
+		}
+		else
+		{
+			motorManager.changeDirection(STOPED, STOPED, STOPED, STOPED);
+		}
+	}
+	else {
+		if (servo.attached()) {
 
-  if(distance <= 10) {
-    needToChangeDirection = true;
-  }
+			double distance = utlrasonicSensor.getDistance();
 
-  delay(1);
+			if (distance <= 1) {
+				motorManager.stop();
+			}
 
-  updateServoMotor();
+			if (distance <= 8) {
+				motorManager.changeDirectionFromServoLoc(motorLoc, distance);
+			}
+			else {
+				motorManager.defualtDirection();
+			}
+
+			delay(1);
+
+			updateServoMotor();
+		}
+		else {
+			motorManager.stop();
+		}
+	}
 }
 
 void updateServoMotor() {
-  
-  if(motorNeg) {
-    motorLoc-=2;
-  } else {
-    motorLoc+=2;
-  }
 
-  if(motorLoc <= 0 || motorLoc > 180) {
-    motorNeg = !motorNeg;
+	servo.write(motorLoc);
 
-    if(needToChangeDirection) {
-      needToChangeDirection = false;
-      motorManager.changeDirectionFromDisatenceArray(distances);
-    } else {
-      motorManager.defualtDirection();
-    }
-  }
+	delay(200);
 
-  servo.write(motorLoc);
+	if (motorLoc >= 180) {
+		motorPossitiveLoc = false;
+	}
+	else if (motorLoc <= 0) {
+		motorPossitiveLoc = true;
+	}
+
+	motorLoc += motorPossitiveLoc ? 90 : -90;
 }
 
